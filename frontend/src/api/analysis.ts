@@ -67,8 +67,15 @@ export const analysisApi = {
 
   // ── Optimization ─────────────────────────────────────────────────────────
 
-  async optimizeModel(projectId: string, profile: OptimizationProfile): Promise<OptimizationResult> {
-    const { data } = await client.post(`/projects/${projectId}/optimize`, { profile });
+  async optimizeModel(
+    projectId: string,
+    profile: OptimizationProfile,
+    setActive = false,
+  ): Promise<OptimizationResult> {
+    const { data } = await client.post(`/projects/${projectId}/optimize`, {
+      profile,
+      set_active: setActive,
+    });
     return data as OptimizationResult;
   },
 

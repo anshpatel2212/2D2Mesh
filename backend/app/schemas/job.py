@@ -37,7 +37,7 @@ class JobPublic(ApiModel):
 
 class GenerateRequest(ApiModel):
     upload_id: str
-    name: Optional[str] = Field(default=None, max_length=80)
+    name: Optional[str] = Field(default=None, max_length=200)
     settings: GenerationSettings = GenerationSettings()
 
 

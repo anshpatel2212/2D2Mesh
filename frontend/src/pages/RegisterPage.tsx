@@ -42,18 +42,18 @@ export function RegisterPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left: form */}
-      <div className="relative flex flex-col bg-ink-950 px-6 py-8 sm:px-12">
+      <div className="relative flex flex-col bg-slate-50 px-6 py-8 transition-colors duration-200 dark:bg-ink-950 sm:px-12">
         <div className="pointer-events-none absolute inset-0 bg-aurora opacity-60" aria-hidden />
         <div className="relative z-10">
           <Logo />
         </div>
         <div className="relative z-10 mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-12">
           <div className="mb-8">
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-200">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-700 dark:text-accent-200">
               <Icon name="sparkles" className="h-3.5 w-3.5" /> Free to start
             </span>
-            <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white">Create your account</h1>
-            <p className="mt-1.5 text-sm text-slate-400">
+            <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Create your account</h1>
+            <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               Start converting images into 3D models in minutes.
             </p>
           </div>

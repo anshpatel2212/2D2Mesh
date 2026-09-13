@@ -114,6 +114,19 @@ function HeroPreview() {
           </PreviewChip>
         </div>
 
+        {/* Source photo chip in Hero */}
+        <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2.5 rounded-xl border border-white/10 bg-ink-950/70 p-1.5 pr-3 shadow-lg backdrop-blur">
+          <img
+            src="/demo/source-cube.jpg"
+            alt="Source input"
+            className="h-9 w-9 rounded-lg object-cover border border-white/10"
+          />
+          <div className="leading-tight">
+            <span className="text-[10px] font-mono text-slate-400 block">Input photo</span>
+            <span className="text-xs font-semibold text-white">Quantum Cube</span>
+          </div>
+        </div>
+
         {/* Rotating hint */}
         <div className="pointer-events-none absolute bottom-4 right-4 flex items-center gap-2 rounded-lg border border-white/10 bg-ink-950/60 px-3 py-1.5 text-[11px] text-slate-400 backdrop-blur">
           <Icon name="rotate" className="h-3.5 w-3.5 text-brand-300" /> Drag to inspect
@@ -282,7 +295,7 @@ function LandingHeader({ onCtaClick }: { onCtaClick: () => void }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/5 bg-ink-950/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl dark:border-white/5 dark:bg-ink-950/70">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Logo />
 
@@ -295,7 +308,7 @@ function LandingHeader({ onCtaClick }: { onCtaClick: () => void }) {
             ["#pricing", "Pricing"],
             ["#faq", "FAQ"],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="text-sm font-medium text-slate-400 transition-colors hover:text-white">
+            <a key={href} href={href} className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
               {label}
             </a>
           ))}
@@ -306,13 +319,13 @@ function LandingHeader({ onCtaClick }: { onCtaClick: () => void }) {
             type="button"
             aria-label="Toggle theme"
             onClick={toggleTheme}
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
           >
             <Icon name={resolvedTheme === "dark" ? "sun" : "moon"} className="h-5 w-5" />
           </button>
           <Link
             to="/login"
-            className="hidden rounded-xl border border-white/12 px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white sm:block"
+            className="hidden rounded-xl border border-slate-300 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-white/12 dark:bg-transparent dark:text-slate-200 dark:hover:bg-white/5 dark:hover:text-white sm:block"
           >
             Sign in
           </Link>
@@ -377,7 +390,114 @@ function SectionHeading({
   );
 }
 
+const showcaseItems = [
+  {
+    id: "cube",
+    label: "Cyber Cube",
+    icon: "cube" as const,
+    title: "Quantum Tech Cube",
+    category: "Artifact · Hard Surface",
+    image: "/demo/source-cube.jpg",
+    specs: "1024 × 1024 px · sRGB",
+    tris: "48K tris · PBR texture",
+    renderMesh: () => (
+      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.7}>
+        <group>
+          {/* Main body */}
+          <mesh>
+            <boxGeometry args={[1.3, 1.3, 1.3]} />
+            <meshStandardMaterial
+              color="#1d1135"
+              metalness={0.8}
+              roughness={0.2}
+              emissive="#7c3aed"
+              emissiveIntensity={0.25}
+            />
+          </mesh>
+          {/* Cyber wireframe cage */}
+          <mesh>
+            <boxGeometry args={[1.34, 1.34, 1.34]} />
+            <meshStandardMaterial color="#a855f7" wireframe transparent opacity={0.35} />
+          </mesh>
+          {/* Glowing core */}
+          <mesh>
+            <boxGeometry args={[0.68, 0.68, 0.68]} />
+            <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.7} roughness={0.15} />
+          </mesh>
+        </group>
+      </Float>
+    ),
+  },
+  {
+    id: "sneaker",
+    label: "Tech Sneaker",
+    icon: "zap" as const,
+    title: "Aerotrack Runner",
+    category: "Product · Footwear",
+    image: "/demo/source-sneaker.jpg",
+    specs: "1024 × 1024 px · sRGB",
+    tris: "62K tris · UV mapped",
+    renderMesh: () => (
+      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.6}>
+        <group rotation={[0.2, 0.4, 0]}>
+          <mesh position={[0, -0.4, 0]}>
+            <boxGeometry args={[2.2, 0.35, 0.9]} />
+            <meshStandardMaterial color="#0e7490" roughness={0.3} metalness={0.4} emissive="#06b6d4" emissiveIntensity={0.35} />
+          </mesh>
+          <mesh position={[0, 0.05, 0]}>
+            <boxGeometry args={[1.9, 0.7, 0.85]} />
+            <meshStandardMaterial color="#f8fafc" roughness={0.4} metalness={0.2} />
+          </mesh>
+          <mesh position={[-0.45, 0.6, 0]}>
+            <cylinderGeometry args={[0.42, 0.45, 0.6, 16]} />
+            <meshStandardMaterial color="#7c3aed" roughness={0.3} metalness={0.5} emissive="#6d28d9" emissiveIntensity={0.3} />
+          </mesh>
+          <mesh position={[0, -0.2, 0]}>
+            <boxGeometry args={[2.24, 0.08, 0.94]} />
+            <meshStandardMaterial color="#c084fc" emissive="#a855f7" emissiveIntensity={0.9} />
+          </mesh>
+        </group>
+      </Float>
+    ),
+  },
+  {
+    id: "drone",
+    label: "Aero Drone",
+    icon: "cpu" as const,
+    title: "Specter-7 Surveillance",
+    category: "Robotics · Industrial",
+    image: "/demo/source-drone.jpg",
+    specs: "1024 × 1024 px · sRGB",
+    tris: "56K tris · Watertight",
+    renderMesh: () => (
+      <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.8}>
+        <group>
+          <mesh>
+            <sphereGeometry args={[0.95, 32, 32]} />
+            <meshStandardMaterial color="#1e293b" metalness={0.85} roughness={0.22} />
+          </mesh>
+          <mesh rotation={[0, Math.PI / 2, 0]}>
+            <torusGeometry args={[0.98, 0.06, 16, 64]} />
+            <meshStandardMaterial color="#c084fc" emissive="#9333ea" emissiveIntensity={1} />
+          </mesh>
+          <mesh position={[0, 0, 0.85]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.3, 0.35, 0.25, 32]} />
+            <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0, 0, 0.96]}>
+            <sphereGeometry args={[0.18, 16, 16]} />
+            <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.8} />
+          </mesh>
+        </group>
+      </Float>
+    ),
+  },
+];
+
 function BeforeAfter() {
+  const [activeId, setActiveId] = useState("cube");
+  const activeItem = showcaseItems.find((item) => item.id === activeId) || showcaseItems[0];
+
   return (
     <section id="how" className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <SectionHeading
@@ -386,50 +506,102 @@ function BeforeAfter() {
         subtitle="The AI reconstructs depth, volume and material from a single 2D image — no multi-angle capture needed."
       />
 
-      <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-2">
-        {/* Before */}
-        <div className="panel overflow-hidden">
-          <div className="flex items-center justify-between border-b border-white/8 px-4 py-3">
-            <span className="flex items-center gap-2 text-sm font-medium text-slate-300">
-              <Icon name="image" className="h-4 w-4 text-slate-400" /> Source image
+      {/* Showcase selection pills */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        {showcaseItems.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => setActiveId(item.id)}
+            className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-semibold transition-all ${
+              activeId === item.id
+                ? "border-brand-500/50 bg-brand-500/15 text-brand-500 dark:text-brand-300 shadow-glow-sm"
+                : "border-slate-200/80 bg-white/80 text-slate-600 hover:border-brand-400/30 hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400 dark:hover:bg-white/[0.07] dark:hover:text-white"
+            }`}
+          >
+            <Icon name={item.icon} className="h-3.5 w-3.5" />
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-8 grid items-stretch gap-6 lg:grid-cols-2">
+        {/* Before: Source Image */}
+        <div className="panel group overflow-hidden">
+          <div className="flex items-center justify-between border-b border-slate-200/80 px-4 py-3 dark:border-white/8">
+            <span className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Icon name="image" className="h-4 w-4 text-brand-500 dark:text-slate-400" /> Source image
             </span>
-            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-400">2D</span>
-          </div>
-          <div className="relative flex h-64 items-center justify-center overflow-hidden bg-ink-800/60 sm:h-80">
-            <div className="absolute inset-6 rounded-2xl bg-brand-gradient-soft blur-2xl" aria-hidden />
-            <div className="relative w-40 h-52 sm:w-48 sm:h-60 rounded-2xl border border-white/10 bg-gradient-to-b from-white/20 to-white/5 shadow-2xl flex items-center justify-center">
-              <Icon name="image" className="h-14 w-14 text-white/40" strokeWidth={1.2} />
+            <div className="flex items-center gap-2">
+              <span className="rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                2D · PNG
+              </span>
             </div>
-            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-lg bg-ink-950/70 px-2.5 py-1 text-[11px] text-slate-400 backdrop-blur">
-              <span className="glow-dot h-1.5 w-1.5 bg-slate-400" /> Flat · no depth
+          </div>
+          <div className="relative flex h-80 items-center justify-center overflow-hidden bg-slate-100/70 p-4 sm:h-96 dark:bg-ink-800/60">
+            <div className="absolute inset-6 rounded-2xl bg-brand-gradient-soft blur-2xl opacity-60" aria-hidden />
+
+            {/* Image Container */}
+            <div className="relative flex h-full max-h-80 w-auto aspect-square items-center justify-center overflow-hidden rounded-2xl border border-slate-200/80 bg-ink-950 shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] dark:border-white/15 dark:shadow-glow-sm">
+              <img
+                src={activeItem.image}
+                alt={activeItem.title}
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+              {/* Specs Chip */}
+              <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-lg border border-white/15 bg-black/60 px-2.5 py-1 font-mono text-[10px] text-slate-200 backdrop-blur">
+                <span className="glow-dot h-1.5 w-1.5 bg-brand-400" /> {activeItem.specs}
+              </div>
+
+              {/* Title overlay */}
+              <div className="absolute bottom-3 right-3 text-right">
+                <span className="block text-xs font-semibold text-white drop-shadow">{activeItem.title}</span>
+                <span className="block text-[10px] font-mono text-slate-300 drop-shadow">{activeItem.category}</span>
+              </div>
+            </div>
+
+            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 shadow backdrop-blur dark:border-white/10 dark:bg-ink-950/80 dark:text-slate-400">
+              <span className="glow-dot h-1.5 w-1.5 bg-slate-400" /> Flat · single view
             </div>
           </div>
         </div>
 
-        {/* After */}
+        {/* After: Generated 3D Model */}
         <div className="panel overflow-hidden">
-          <div className="flex items-center justify-between border-b border-white/8 px-4 py-3">
-            <span className="flex items-center gap-2 text-sm font-medium text-slate-300">
-              <Icon name="cube" className="h-4 w-4 text-brand-300" /> Generated model
+          <div className="flex items-center justify-between border-b border-slate-200/80 px-4 py-3 dark:border-white/8">
+            <span className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Icon name="cube" className="h-4 w-4 text-brand-500 dark:text-brand-300" /> Generated model
             </span>
-            <span className="rounded-md bg-brand-500/10 px-2 py-0.5 font-mono text-[10px] text-brand-300">3D · GLB</span>
+            <div className="flex items-center gap-2">
+              <span className="rounded-md bg-brand-500/10 px-2 py-0.5 font-mono text-[10px] text-brand-600 dark:text-brand-300">
+                3D · GLB
+              </span>
+            </div>
           </div>
-          <div className="relative flex h-64 items-center justify-center overflow-hidden bg-ink-800/60 sm:h-80">
-            <div className="absolute inset-0 bg-aurora" aria-hidden />
+          <div className="relative flex h-80 items-center justify-center overflow-hidden bg-slate-100/70 sm:h-96 dark:bg-ink-800/60">
+            <div className="absolute inset-0 bg-aurora opacity-75" aria-hidden />
             <Canvas camera={{ position: [3.4, 1.8, 3.4], fov: 40 }} dpr={[1, 2]}>
-              <ambientLight intensity={0.4} />
-              <directionalLight position={[4, 6, 4]} intensity={1.4} />
-              <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.8}>
-                <mesh>
-                  <boxGeometry args={[1, 1.3, 1]} />
-                  <meshStandardMaterial color="#7c3aed" metalness={0.5} roughness={0.25} />
-                </mesh>
-              </Float>
-              <Sparkles count={40} scale={4} size={2} speed={0.4} color="#22d3ee" opacity={0.6} />
+              <ambientLight intensity={0.5} />
+              <directionalLight position={[4, 6, 4]} intensity={1.5} color="#c084fc" />
+              <directionalLight position={[-4, -3, -4]} intensity={1.2} color="#22d3ee" />
+              {activeItem.renderMesh()}
+              <Sparkles count={45} scale={4.5} size={2} speed={0.4} color="#22d3ee" opacity={0.65} />
               <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.4} />
             </Canvas>
-            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-lg bg-ink-950/70 px-2.5 py-1 text-[11px] text-slate-300 backdrop-blur">
+
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white/90 px-2.5 py-1 font-mono text-[10px] text-slate-600 shadow backdrop-blur dark:border-white/10 dark:bg-ink-950/80 dark:text-slate-300">
+              <Icon name="check" className="h-3 w-3 text-emerald-400" /> {activeItem.tris}
+            </div>
+
+            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 shadow backdrop-blur dark:border-white/10 dark:bg-ink-950/80 dark:text-slate-300">
               <span className="glow-dot h-1.5 w-1.5 bg-emerald-400" /> Volumetric · textured
+            </div>
+
+            <div className="pointer-events-none absolute bottom-4 right-4 flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white/90 px-2.5 py-1 text-[10px] font-mono text-slate-500 shadow backdrop-blur dark:border-white/10 dark:bg-ink-950/80 dark:text-slate-400">
+              <Icon name="rotate" className="h-3 w-3 text-brand-400" /> Drag to rotate
             </div>
           </div>
         </div>
@@ -838,7 +1010,7 @@ function SiteFooter() {
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-ink-950 text-slate-200">
+    <div className="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-200 dark:bg-ink-950 dark:text-slate-200">
       <div className="pointer-events-none fixed inset-0 z-0 bg-aurora" aria-hidden />
       <LandingHeader onCtaClick={() => {}} />
 

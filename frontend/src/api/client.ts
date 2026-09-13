@@ -78,7 +78,15 @@ export function clearTokens() {
 export function extractApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const envelope = error.response?.data as ApiErrorEnvelope | undefined;
-    if (envelope?.error?.message) return envelope.error.message;
+    if (envelope?.error) {
+      if (envelope.error.details && typeof envelope.error.details === "object") {
+        const details = Object.entries(envelope.error.details)
+          .map(([key, val]) => `${key}: ${val}`)
+          .join("; ");
+        if (details) return `${envelope.error.message}: ${details}`;
+      }
+      if (envelope.error.message) return envelope.error.message;
+    }
     return error.message;
   }
   if (error instanceof Error) return error.message;

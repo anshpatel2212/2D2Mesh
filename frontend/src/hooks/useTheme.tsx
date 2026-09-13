@@ -23,9 +23,6 @@ function systemPrefersDark() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-function resolve(theme: ThemePreference): "light" | "dark" {
-  return theme === "system" ? (systemPrefersDark() ? "dark" : "light") : theme;
-}
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemePreference>(() => {
@@ -33,20 +30,28 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (stored === "light" || stored === "dark" || stored === "system") return stored;
     return "dark";
   });
-  const resolvedTheme = useMemo(() => resolve(theme), [theme]);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", resolvedTheme === "dark");
-  }, [resolvedTheme]);
+  const [systemDark, setSystemDark] = useState(systemPrefersDark);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      if (theme === "system") document.documentElement.classList.toggle("dark", media.matches);
-    };
+    const onChange = (e: MediaQueryListEvent) => setSystemDark(e.matches);
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
-  }, [theme]);
+  }, []);
+
+  const resolvedTheme = useMemo<"light" | "dark">(() => {
+    if (theme === "system") return systemDark ? "dark" : "light";
+    return theme;
+  }, [theme, systemDark]);
+
+  useEffect(() => {
+    const isDark = resolvedTheme === "dark";
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.classList.toggle("light", !isDark);
+    document.documentElement.setAttribute("data-theme", resolvedTheme);
+    document.documentElement.style.colorScheme = resolvedTheme;
+  }, [resolvedTheme]);
 
   const setTheme = useCallback((next: ThemePreference) => {
     localStorage.setItem(STORAGE_KEY, next);

@@ -42,7 +42,7 @@ class OptimizationService:
         self.storage = storage
 
     async def optimize_project(
-        self, user_id: str, project_id: str, profile: str
+        self, user_id: str, project_id: str, profile: str, set_active: bool = False
     ) -> dict:
         """Optimize a project's model with the given profile."""
         if profile not in VALID_PROFILES:
@@ -98,6 +98,12 @@ class OptimizationService:
             },
         )
         inserted_asset = await self.models.insert_one(opt_asset.model_dump(by_alias=True))
+
+        # Update the project's model reference if set_active is requested
+        if set_active:
+            await self.projects.update_by_id(
+                to_object_id(project_id), {"model_asset_id": inserted_asset["_id"]}
+            )
 
         # Record edit history
         history_doc = EditHistoryDocument(

@@ -4,12 +4,12 @@ import { cn } from "../../lib/format";
 type Tone = "gray" | "green" | "red" | "amber" | "blue" | "purple";
 
 const tones: Record<Tone, string> = {
-  gray: "bg-white/8 text-slate-300 border-white/10",
-  green: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  red: "bg-red-500/15 text-red-300 border-red-500/30",
-  amber: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  blue: "bg-accent-500/15 text-accent-300 border-accent-500/30",
-  purple: "bg-brand-500/15 text-brand-300 border-brand-500/30",
+  gray: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-white/8 dark:text-slate-300 dark:border-white/10",
+  green: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30",
+  red: "bg-red-50 text-red-700 border-red-200 dark:bg-red-500/15 dark:text-red-300 dark:border-red-500/30",
+  amber: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30",
+  blue: "bg-sky-50 text-sky-700 border-sky-200 dark:bg-accent-500/15 dark:text-accent-300 dark:border-accent-500/30",
+  purple: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-brand-500/15 dark:text-brand-300 dark:border-brand-500/30",
 };
 
 export function Badge({

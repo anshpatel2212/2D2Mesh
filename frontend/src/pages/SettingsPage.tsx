@@ -24,11 +24,21 @@ export function SettingsPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-8 animate-fade-in">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight text-white">Settings</h1>
-        <p className="mt-1 text-slate-400">Manage your account preferences and model defaults.</p>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Settings</h1>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">Manage your account preferences and model defaults.</p>
       </div>
 
-      <AppearanceSection theme={theme} setTheme={setTheme} />
+      <AppearanceSection
+        theme={theme}
+        setTheme={async (t) => {
+          setTheme(t);
+          try {
+            await updateUser({ preferences: { ...user.preferences, theme: t } });
+          } catch {
+            // Local state is already updated
+          }
+        }}
+      />
 
       <DefaultModelSection
         currentModel={user.preferences?.default_model ?? "auto"}
@@ -62,8 +72,8 @@ export function SettingsPage() {
 
 function SectionTitle({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/15 text-brand-300">
+    <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-slate-900 dark:text-white">
+      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/15 text-brand-600 dark:text-brand-300">
         {icon}
       </span>
       {children}
@@ -98,12 +108,12 @@ function AppearanceSection({
               onClick={() => setTheme(t.value)}
               className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all duration-200 ${
                 theme === t.value
-                  ? "border-brand-400/60 bg-brand-500/10 shadow-glow"
-                  : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
+                  ? "border-brand-500 bg-brand-500/10 shadow-sm dark:border-brand-400/60 dark:bg-brand-500/10 dark:shadow-glow"
+                  : "border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:hover:border-white/20 dark:hover:bg-white/[0.03]"
               }`}
             >
-              <span className={theme === t.value ? "text-brand-300" : "text-slate-500"}>{t.icon}</span>
-              <span className="text-sm font-medium text-white">{t.label}</span>
+              <span className={theme === t.value ? "text-brand-600 dark:text-brand-300" : "text-slate-400 dark:text-slate-500"}>{t.icon}</span>
+              <span className="text-sm font-medium text-slate-800 dark:text-white">{t.label}</span>
             </button>
           ))}
         </div>

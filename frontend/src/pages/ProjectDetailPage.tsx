@@ -15,9 +15,7 @@ import { ProgressBar } from "../components/ui/ProgressBar";
 import { Skeleton } from "../components/ui/Skeleton";
 import { Alert } from "../components/ui/Feedback";
 import { Icon } from "../components/ui/Icon";
-import { QualityScorePanel } from "../components/analysis/QualityScorePanel";
 import { AutoRepairPanel } from "../components/analysis/AutoRepairPanel";
-import { AIEditPanel } from "../components/analysis/AIEditPanel";
 import { OptimizationPanel } from "../components/analysis/OptimizationPanel";
 import { ExportPanel } from "../components/analysis/ExportPanel";
 import type { ProjectDetail } from "../types/project";
@@ -467,7 +465,7 @@ export function ProjectDetailPage() {
             </span>
             <div>
               <h2 className="font-display text-lg font-semibold text-white">AI Model Tools</h2>
-              <p className="text-xs text-slate-500">Analyze, repair, edit, and optimize your 3D model.</p>
+              <p className="text-xs text-slate-500">Repair and optimize your 3D model.</p>
             </div>
           </div>
 
@@ -482,10 +480,8 @@ export function ProjectDetailPage() {
 
           {/* 2-column grid for AI tools */}
           <div className="grid gap-4 lg:grid-cols-2">
-            <QualityScorePanel projectId={projectId} />
             <AutoRepairPanel projectId={projectId} onProjectUpdated={fetchProject} />
-            <AIEditPanel projectId={projectId} onModelUpdated={fetchProject} />
-            <OptimizationPanel projectId={projectId} />
+            <OptimizationPanel projectId={projectId} onProjectUpdated={fetchProject} />
           </div>
         </div>
       )}

@@ -23,14 +23,14 @@ export function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-ink-950">
+    <div className="flex min-h-screen bg-slate-50 transition-colors duration-200 dark:bg-ink-950">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 z-0 bg-aurora" aria-hidden />
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-white/8 bg-ink-900/80 backdrop-blur-2xl transition-transform duration-300 lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-200/80 bg-white/95 backdrop-blur-2xl transition-transform duration-300 dark:border-white/8 dark:bg-ink-900/80 lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
         id="app-sidebar"
@@ -47,7 +47,7 @@ export function AppShell() {
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-ink-950/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm dark:bg-ink-950/70 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden
         />
@@ -59,7 +59,7 @@ export function AppShell() {
         <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 pb-24 pt-6 sm:px-6 lg:pb-10 lg:pt-8">
           <Outlet />
         </main>
-        <footer className="border-t border-white/8 py-6">
+        <footer className="border-t border-slate-200/80 py-6 dark:border-white/8">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 text-sm text-slate-500 sm:flex-row sm:px-6">
             <p>© {new Date().getFullYear()} Vision3D AI</p>
             <p className="text-xs">Turn any image into a 3D model.</p>
@@ -88,13 +88,13 @@ function SidebarContent({
 }) {
   return (
     <>
-      <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-white/8 px-5">
+      <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-slate-200/80 px-5 dark:border-white/8">
         <Logo />
       </div>
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
         {isAuthenticated && !isLoading && (
           <ul className="space-y-1">
-            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
               Workspace
             </p>
             {primaryNav.map((item) => (
@@ -105,7 +105,7 @@ function SidebarContent({
           </ul>
         )}
         <ul className="space-y-1">
-          <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
             General
           </p>
           {secondaryNav.map((item) => (
@@ -127,7 +127,7 @@ function SidebarContent({
         </ul>
       </nav>
 
-      <div className="shrink-0 border-t border-white/8 p-4">
+      <div className="shrink-0 border-t border-slate-200/80 p-4 dark:border-white/8">
         {isAuthenticated && user ? (
           <UserCard user={user} onNavigate={onNavigate} />
         ) : (
@@ -142,7 +142,7 @@ function SidebarContent({
             <Link
               to="/login"
               onClick={onNavigate}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/12 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-white/12 dark:bg-transparent dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
             >
               Sign in
             </Link>
@@ -163,8 +163,8 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate: () => vo
         cn(
           "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
           isActive
-            ? "bg-brand-500/15 text-brand-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_0_24px_-10px_rgba(139,92,246,0.8)]"
-            : "text-slate-400 hover:bg-white/5 hover:text-white",
+            ? "bg-brand-500/10 text-brand-700 shadow-sm dark:bg-brand-500/15 dark:text-brand-200 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_0_24px_-10px_rgba(139,92,246,0.8)]"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white",
         )
       }
     >
@@ -172,11 +172,11 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate: () => vo
         <>
           <Icon
             name={item.icon}
-            className={cn("h-5 w-5 transition-all", isActive ? "text-brand-300" : "text-slate-500 group-hover:text-slate-300")}
+            className={cn("h-5 w-5 transition-all", isActive ? "text-brand-600 dark:text-brand-300" : "text-slate-400 group-hover:text-slate-700 dark:text-slate-500 dark:group-hover:text-slate-300")}
             strokeWidth={1.8}
           />
           {item.label}
-          {isActive && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-brand-400 shadow-glow" aria-hidden />}
+          {isActive && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-brand-500 shadow-glow dark:bg-brand-400" aria-hidden />}
         </>
       )}
     </NavLink>
@@ -197,8 +197,8 @@ function UserCard({ user, onNavigate }: { user: NonNullable<ReturnType<typeof us
         {initials(user.username)}
       </button>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-white">{user.username}</p>
-        <p className="truncate text-xs text-slate-500">{user.email}</p>
+        <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{user.username}</p>
+        <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
       </div>
       <button
         type="button"
@@ -207,7 +207,7 @@ function UserCard({ user, onNavigate }: { user: NonNullable<ReturnType<typeof us
           navigate("/");
         }}
         aria-label="Sign out"
-        className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-white/5 hover:text-red-400"
+        className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-white/5 dark:hover:text-red-400"
       >
         <Icon name="external" className="h-4 w-4 -rotate-45" />
       </button>
@@ -229,19 +229,19 @@ function Topbar({ user, onMenuClick }: { user: ReturnType<typeof useAuth>["user"
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-white/8 bg-ink-950/70 px-4 backdrop-blur-xl sm:px-6">
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200/80 bg-white/80 px-4 backdrop-blur-xl dark:border-white/8 dark:bg-ink-950/70 sm:px-6">
       <button
         type="button"
         aria-label="Open menu"
         onClick={onMenuClick}
-        className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-white/5 hover:text-white lg:hidden"
+        className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white lg:hidden"
       >
         <Icon name="menu" />
       </button>
 
       {/* Breadcrumbs / page context */}
-      <div className="hidden min-w-0 items-center gap-2 text-sm text-slate-500 md:flex">
-        <span className="font-medium text-slate-400">Vision3D AI</span>
+      <div className="hidden min-w-0 items-center gap-2 text-sm text-slate-500 dark:text-slate-400 md:flex">
+        <span className="font-medium text-slate-800 dark:text-slate-300">Vision3D AI</span>
         <span aria-hidden>/</span>
         <span className="truncate">Workspace</span>
       </div>
@@ -259,30 +259,30 @@ function Topbar({ user, onMenuClick }: { user: ReturnType<typeof useAuth>["user"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
-              className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] py-1 pl-1 pr-2 transition-colors hover:bg-white/[0.08]"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 py-1 transition-colors hover:bg-slate-50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
             >
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient text-xs font-bold text-white">
                 {initials(user.username)}
               </span>
-              <span className="hidden text-sm font-medium text-slate-200 sm:block">{user.username}</span>
+              <span className="hidden text-sm font-medium text-slate-800 dark:text-slate-200 sm:block">{user.username}</span>
               <Icon name="chevronDown" className="h-4 w-4 text-slate-400" />
             </button>
             {menuOpen && (
               <Fragment>
                 <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div className="absolute right-0 z-20 mt-2 w-56 animate-scale-in rounded-xl glass-strong p-1.5 shadow-card">
-                  <div className="border-b border-white/8 px-3 py-2.5">
-                    <p className="truncate text-sm font-semibold text-white">{user.username}</p>
-                    <p className="truncate text-xs text-slate-500">{user.email}</p>
+                <div className="absolute right-0 z-20 mt-2 w-56 animate-scale-in rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl dark:border-white/10 dark:bg-slate-900">
+                  <div className="border-b border-slate-100 px-3 py-2.5 dark:border-white/8">
+                    <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{user.username}</p>
+                    <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
                   </div>
                   <MenuLink to="/profile" onClose={() => setMenuOpen(false)}>Profile</MenuLink>
                   <MenuLink to="/settings" onClose={() => setMenuOpen(false)}>Settings</MenuLink>
                   {user.role === "admin" && <MenuLink to="/admin" onClose={() => setMenuOpen(false)}>Admin Dashboard</MenuLink>}
-                  <div className="my-1 border-t border-white/8" />
+                  <div className="my-1 border-t border-slate-100 dark:border-white/8" />
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10"
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                   >
                     Sign out
                   </button>
@@ -318,7 +318,7 @@ function TopbarButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+      className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
     >
       {children}
     </button>
@@ -330,7 +330,7 @@ function MenuLink({ to, children, onClose }: { to: string; children: React.React
     <Link
       to={to}
       onClick={onClose}
-      className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+      className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
     >
       {children}
     </Link>
@@ -346,7 +346,7 @@ export function Logo({ className }: { className?: string }) {
         <Icon name="logo" className="h-5 w-5" strokeWidth={1.9} />
         <span className="absolute inset-0 rounded-xl bg-brand-gradient opacity-40 blur-lg" aria-hidden />
       </span>
-      <span className="font-display text-lg font-bold tracking-tight text-white">
+      <span className="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
         Vision<span className="text-gradient">3D</span> AI
       </span>
     </Link>
@@ -361,7 +361,7 @@ function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-white/8 bg-ink-900/90 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-slate-200 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl dark:border-white/8 dark:bg-ink-900/90 lg:hidden"
     >
       {primaryNav.map((item) => (
         <NavLink
@@ -371,7 +371,7 @@ function MobileNav() {
           className={({ isActive }) =>
             cn(
               "flex flex-col items-center gap-1 rounded-xl px-4 py-2.5 text-[11px] font-medium transition-colors",
-              isActive ? "text-brand-300" : "text-slate-500 hover:text-slate-300",
+              isActive ? "text-brand-600 dark:text-brand-300" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300",
             )
           }
         >

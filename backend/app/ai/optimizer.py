@@ -104,39 +104,87 @@ def optimize_glb(glb_bytes: bytes, profile: OptimizationProfile = "web") -> Opti
 
 # ── Profile implementations ──────────────────────────────────────────────────
 
+def _decimate_mesh(mesh: Any, target_faces: int) -> Any:
+    """Decimate a mesh to target face count while preserving materials, UVs and vertex colors."""
+    if len(mesh.faces) <= target_faces or target_faces < 4:
+        return mesh
+
+    try:
+        import trimesh
+        from scipy.spatial import cKDTree
+
+        # Call trimesh's built-in simplify_quadric_decimation (which uses fast_simplification)
+        simplified = mesh.simplify_quadric_decimation(face_count=target_faces)
+        if simplified is None or len(simplified.faces) == 0:
+            return mesh
+
+        # Preserve UVs and TextureVisuals if present
+        if (
+            hasattr(mesh, "visual")
+            and hasattr(mesh.visual, "uv")
+            and mesh.visual.uv is not None
+            and len(mesh.visual.uv) == len(mesh.vertices)
+            and len(mesh.vertices) > 0
+            and len(simplified.vertices) > 0
+        ):
+            tree = cKDTree(mesh.vertices)
+            _, indices = tree.query(simplified.vertices)
+            new_uv = mesh.visual.uv[indices]
+            material = getattr(mesh.visual, "material", None)
+            simplified.visual = trimesh.visual.TextureVisuals(uv=new_uv, material=material)
+        elif (
+            hasattr(mesh, "visual")
+            and hasattr(mesh.visual, "vertex_colors")
+            and mesh.visual.vertex_colors is not None
+            and len(mesh.visual.vertex_colors) == len(mesh.vertices)
+            and len(mesh.vertices) > 0
+            and len(simplified.vertices) > 0
+        ):
+            tree = cKDTree(mesh.vertices)
+            _, indices = tree.query(simplified.vertices)
+            new_colors = mesh.visual.vertex_colors[indices]
+            simplified.visual = trimesh.visual.ColorVisuals(mesh=simplified, vertex_colors=new_colors)
+
+        # Merge close vertices
+        try:
+            simplified.merge_vertices()
+        except Exception:
+            pass
+
+        return simplified
+    except Exception as exc:
+        logger.debug("Mesh decimation failed for mesh: %s", exc)
+        return mesh
+
+
 def _optimize_web(scene: Any, meshes: Dict[str, Any], ops: list):
     """Web profile: reduce polygons by 60% + clean up."""
-    try:
-        from trimesh.simplify import simplify_quadric_decimation
-    except ImportError:
-        logger.warning("Quadric decimation not available — skipping polygon reduction.")
-        return scene, ops
-
+    reduced = False
     for name, mesh in meshes.items():
         try:
             target = max(4, int(len(mesh.faces) * 0.4))  # keep 40%
-            simplified = simplify_quadric_decimation(mesh, target)
+            simplified = _decimate_mesh(mesh, target)
             if hasattr(scene, "geometry") and name in scene.geometry:
                 scene.geometry[name] = simplified
+            if len(simplified.faces) < len(mesh.faces):
+                reduced = True
         except Exception as exc:
             logger.debug("Web optimize mesh %s: %s", name, exc)
 
-    ops.append("reduce_polygons_60pct")
+    if reduced:
+        ops.append("reduce_polygons_60pct")
     ops.append("merge_vertices")
+    ops.append("preserve_textures")
     return scene, ops
 
 
 def _optimize_game(scene: Any, meshes: Dict[str, Any], ops: list):
     """Game profile: stronger reduction (keep 25%) + normals."""
-    try:
-        from trimesh.simplify import simplify_quadric_decimation
-    except ImportError:
-        return scene, ops
-
+    reduced = False
     for name, mesh in meshes.items():
         try:
             target = max(4, int(len(mesh.faces) * 0.25))  # keep 25%
-            simplified = simplify_quadric_decimation(mesh, target)
+            simplified = _decimate_mesh(mesh, target)
             # Recompute normals for the simplified mesh
             try:
                 simplified.vertex_normals  # trigger compute
@@ -144,10 +192,14 @@ def _optimize_game(scene: Any, meshes: Dict[str, Any], ops: list):
                 pass
             if hasattr(scene, "geometry") and name in scene.geometry:
                 scene.geometry[name] = simplified
+            if len(simplified.faces) < len(mesh.faces):
+                reduced = True
         except Exception as exc:
             logger.debug("Game optimize mesh %s: %s", name, exc)
 
-    ops.extend(["reduce_polygons_75pct", "recompute_normals", "lod_generated"])
+    if reduced:
+        ops.append("reduce_polygons_75pct")
+    ops.extend(["recompute_normals", "lod_generated"])
     return scene, ops
 
 
@@ -175,7 +227,8 @@ def _optimize_print(scene: Any, meshes: Dict[str, Any], ops: list):
             max_dim = float(np.max(extents))
             if max_dim < 10.0:  # likely meters
                 m.apply_scale(1000.0)
-                ops.append("scaled_to_mm")
+                if "scaled_to_mm" not in ops:
+                    ops.append("scaled_to_mm")
         except Exception:
             pass
 

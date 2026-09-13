@@ -2,10 +2,10 @@ import type { ReactNode } from "react";
 import { cn } from "../../lib/format";
 
 const toneClasses = {
-  success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-200",
-  error: "border-red-500/30 bg-red-500/10 text-red-200",
-  warning: "border-amber-500/30 bg-amber-500/10 text-amber-200",
-  info: "border-brand-500/30 bg-brand-500/10 text-brand-200",
+  success: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
+  error: "border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200",
+  warning: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+  info: "border-brand-200 bg-brand-50 text-brand-800 dark:border-brand-500/30 dark:bg-brand-500/10 dark:text-brand-200",
 };
 
 export function Alert({
@@ -46,14 +46,14 @@ export function EmptyState({
   icon?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/15 py-16 text-center">
+    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-300 dark:border-white/15 py-16 text-center">
       {icon && (
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-3xl">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 text-3xl">
           {icon}
         </div>
       )}
-      <h3 className="font-display text-base font-semibold text-white">{title}</h3>
-      {description && <p className="max-w-sm text-sm text-slate-400">{description}</p>}
+      <h3 className="font-display text-base font-semibold text-slate-900 dark:text-white">{title}</h3>
+      {description && <p className="max-w-sm text-sm text-slate-500 dark:text-slate-400">{description}</p>}
       {action && <div className="mt-2">{action}</div>}
     </div>
   );

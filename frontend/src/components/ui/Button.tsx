@@ -16,15 +16,15 @@ const variants: Record<Variant, string> = {
   primary:
     "bg-brand-gradient text-white shadow-glow hover:shadow-glow-lg hover:brightness-110 focus-visible:ring-brand-400 border border-white/10",
   secondary:
-    "bg-white/8 text-slate-100 hover:bg-white/12 border border-white/10 focus-visible:ring-slate-400",
+    "bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 focus-visible:ring-slate-400 dark:bg-white/8 dark:text-slate-100 dark:hover:bg-white/12 dark:border-white/10",
   outline:
-    "border border-white/15 text-slate-200 hover:border-brand-400/40 hover:bg-white/5 hover:text-white focus-visible:ring-brand-400 bg-transparent",
+    "border border-slate-300 text-slate-700 hover:border-brand-500/50 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-brand-500 dark:border-white/15 dark:text-slate-200 dark:hover:border-brand-400/40 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-brand-400 bg-transparent",
   ghost:
-    "text-slate-400 hover:bg-white/5 hover:text-white focus-visible:ring-brand-400",
+    "text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-brand-500 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-brand-400",
   danger:
-    "bg-gradient-to-b from-red-500 to-red-600 text-white shadow-[0_0_20px_-6px_rgba(239,68,68,0.6)] hover:brightness-110 focus-visible:ring-red-400 border border-white/10",
+    "bg-gradient-to-b from-red-500 to-red-600 text-white shadow-[0_0_20px_-6px_rgba(239,68,68,0.6)] hover:brightness-110 focus-visible:ring-red-400 border border-red-400/20",
   success:
-    "bg-gradient-to-b from-emerald-500 to-emerald-600 text-white shadow-[0_0_20px_-6px_rgba(16,185,129,0.6)] hover:brightness-110 focus-visible:ring-emerald-400 border border-white/10",
+    "bg-gradient-to-b from-emerald-500 to-emerald-600 text-white shadow-[0_0_20px_-6px_rgba(16,185,129,0.6)] hover:brightness-110 focus-visible:ring-emerald-400 border border-emerald-400/20",
 };
 
 const sizes: Record<Size, string> = {

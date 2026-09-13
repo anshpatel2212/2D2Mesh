@@ -6,7 +6,6 @@ import { useToast } from "../hooks/useToast";
 import { extractApiError } from "../api/client";
 import { formatBytes } from "../lib/format";
 import { ModelViewer } from "../components/viewer/ModelViewer";
-import { QualityScorePanel } from "../components/analysis/QualityScorePanel";
 import { Button } from "../components/ui/Button";
 import { Spinner } from "../components/ui/Spinner";
 import { Alert } from "../components/ui/Feedback";
@@ -154,11 +153,6 @@ export function ViewerPage() {
         <div className="flex h-96 items-center justify-center rounded-2xl border border-white/10 bg-ink-800">
           <p className="text-slate-500">No model available</p>
         </div>
-      )}
-
-      {/* Quality panel */}
-      {project?.status === "ready" && projectId && (
-        <QualityScorePanel projectId={projectId} />
       )}
     </div>
   );

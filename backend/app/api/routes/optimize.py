@@ -15,6 +15,10 @@ class OptimizeRequest(BaseModel):
         default="web",
         description="Optimization profile: 'web' | 'game' | 'print'",
     )
+    set_active: bool = Field(
+        default=False,
+        description="Whether to set this optimized model as the active project model",
+    )
 
 
 @router.post(
@@ -34,4 +38,6 @@ async def optimize_model(
     - **game**: Reduce polygons by 75%, recompute normals, game engine ready.
     - **print**: Watertight repair, scale to mm, STL export included.
     """
-    return await services.optimization.optimize_project(user["id"], project_id, payload.profile)
+    return await services.optimization.optimize_project(
+        user["id"], project_id, payload.profile, set_active=payload.set_active
+    )

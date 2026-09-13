@@ -52,8 +52,9 @@ export function GeneratePage() {
   const handleImageSelect = useCallback((img: DroppedImage) => {
     setImage(img);
     setError(null);
-    const baseName = img.file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
-    setProjectName(baseName.charAt(0).toUpperCase() + baseName.slice(1));
+    const rawName = img.file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
+    const trimmed = rawName.slice(0, 100);
+    setProjectName(trimmed.charAt(0).toUpperCase() + trimmed.slice(1));
   }, []);
 
   const handleClearImage = useCallback(() => {
@@ -108,15 +109,16 @@ export function GeneratePage() {
     if (!uploadId) return;
     setLaunching(true);
     setError(null);
+    const finalName = (projectName || "Untitled Project").trim().slice(0, 200);
     try {
       const project = await projectsApi.create({
-        name: projectName || "Untitled Project",
-        description: `Generated from ${image?.file.name ?? "uploaded image"}`,
+        name: finalName,
+        description: `Generated from ${image?.file.name ?? "uploaded image"}`.slice(0, 500),
       });
 
       const job = await jobsApi.create(project.id, {
         upload_id: uploadId,
-        name: projectName || "Untitled",
+        name: finalName,
         settings,
       });
 
